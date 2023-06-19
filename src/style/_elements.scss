@@ -1,0 +1,29 @@
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-main);
+}
+
+a {
+  text-decoration: none;
+  color: var(--color-accent);
+}
+
+button {
+  padding: 1rem;
+  border: transparent solid 0;
+  color: var(--color-black);
+  font-size: 1rem;
+  font-family: var(--font-main);
+}
+
+input[type="text"],
+input[type="date"],
+input[type="img"],
+select,
+textarea {
+  padding: 0.8rem;
+  border-radius: 0.5rem;
+  color: var(--color-white);
+  background-color : var(--color-black); 
+
+}

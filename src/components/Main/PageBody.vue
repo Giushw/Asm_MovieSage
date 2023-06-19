@@ -4,7 +4,8 @@
   import {ref, type Ref} from 'vue';
   import CardsWrapper from '../Cards/CardsWrapper.vue';
   import CommonSwitch from '../Common/CommonSwitch.vue';
-  import TableWrapper from '../Table/TableWrapper.vue'
+  import TableWrapper from '../Table/TableWrapper.vue';
+  import Modal from '../Common/CommonModal.vue';
 
   const retriveData = (): ResultsObj => {
     let popularFilms: string | null = window.localStorage.getItem('PopularFilms');
@@ -22,6 +23,15 @@
 
   const state: Ref<ResultsObj> = ref(retriveData());
   const view: Ref<ActiveView> = ref('Cards');
+  const modalVisible: Ref<boolean> = ref(false);
+  
+
+  const onAddClick = (): boolean => modalVisible.value = true;
+  const onCloseClick = (): boolean => modalVisible.value = false;
+
+  const onCreate = () => {
+    console.log('create catch')
+  };
 
   const onToggle = (switchValue: boolean): void => {
     switchValue ? view.value = 'Table' : view.value = 'Cards'
@@ -30,13 +40,24 @@
 
 <template>
   <main class="main">
-    <section class="switchgroup">
-      <span>Change View</span>
-      <CommonSwitch
-        :checked="false"
-        @toggle="onToggle"
-      />
+    <section class="actions">
+      <button class="button button--icon" @click="onAddClick" @close-modal="onCloseClick" @create-movie="onCreate">
+        <span>Add a Movie</span>
+        <font-awesome-icon icon="fa-solid fa-plus" size="lg"/>
+      </button>
+
+      <div class="switchgroup">
+        <span>Change View</span>
+        <CommonSwitch
+          :checked="false"
+          @toggle="onToggle"
+        />
+      </div>
     </section>
+
+    <Transition>
+      <Modal v-if="modalVisible"/>
+    </Transition>
 
     <Transition>
       <CardsWrapper v-if="view === 'Cards'" :values="state.results"/>
@@ -55,15 +76,24 @@
     @media (min-width: 768px) {
     }
 
+    .actions {
+      display: flex;
+      place-content: center space-between;
+      padding: 1rem;
+      background-color: var(--color-sub);
+    }
+
     .switchgroup {
       display: none;
 
       @media (min-width: 1024px) {
-        width: 100%;
-        padding: 1rem;
         display: flex;
         place-content: end flex-end;
-        background-color: var(--color-sub);
+      }
+
+      span {
+        display: flex;
+        align-items: center;
       }
     }
 

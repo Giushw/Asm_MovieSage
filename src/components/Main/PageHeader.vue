@@ -27,7 +27,7 @@
     top: 0;
     z-index:500;
     background-color: var(--color-sub);
-    box-shadow: 0px 16px 16px 0px rgba(0,0,0,0.1);
+    box-shadow: 0px 16px 16px 0px rgba(0,0,0,0.35);
 
     .logogroup {
       width: 100%;

@@ -16,14 +16,8 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
 
-
-  & h1, h2, h3, h4, h5 {
-    font-family: var(--font-main);
-  }
-
-  & a {
-    text-decoration: none;
-    color: var(--color-accent);
-  }
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
 }

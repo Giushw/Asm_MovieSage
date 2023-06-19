@@ -42,34 +42,36 @@ type WebChannel = unknown;
 type DvdCountry = unknown;
 
 export interface Result {
+  // -- Struct
   id: number,
-  url: string,
   name: string,
-  type: string,
-  language: string,
-  genres: string[],
   status: Status,
-  runtime: Nullable<number>,
-  averageRuntime: number,
   premiered: string,
-  ended: Nullable<string>,
-  officialSite: Nullable<string>,
-  schedule: {
+  image: Image,
+  summary: string,
+  // -- Partial
+  url?: string,
+  type?: string,
+  language?: string,
+  genres?: string[],
+  runtime?: Nullable<number>,
+  averageRuntime?: number,
+  ended?: Nullable<string>,
+  officialSite?: Nullable<string>,
+  schedule?: {
     time: string,
     days: string[]
   },
-  rating: {
+  rating?: {
     average:  Nullable<number>
   },
-  weight: number,
-  network: Nullable<Network>,
-  webChannel: Nullable<WebChannel>,
-  dvdCountry: Nullable<DvdCountry>,
-  externals: Externals,
-  image: Image,
-  summary: string
-  updated: number,
-  _links: Links
+  weight?: number,
+  network?: Nullable<Network>,
+  webChannel?: Nullable<WebChannel>,
+  dvdCountry?: Nullable<DvdCountry>,
+  externals?: Externals,
+  updated?: number,
+  _links?: Links
 };
 
 export type Results = Result[];

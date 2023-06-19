@@ -9,7 +9,7 @@
 
   const emit = defineEmits(['toggle']);
 
-  const onChange = () => {
+  const onChange = (): void => {
     status.value = !status.value;
     return emit('toggle', status.value)
   };
@@ -19,7 +19,7 @@
 <template>
   <label class="container">
     <span class="label --card" :class="!status ? '--active' : null">
-      <font-awesome-icon icon="fa-solid fa-image" />
+      <font-awesome-icon icon="fa-solid fa-image" size="xl" />
     </span>
     <input 
       type="checkbox"
@@ -29,7 +29,7 @@
     />
     <span class="switch"></span>
     <span class="label --table" :class="status ? '--active' : null">
-      <font-awesome-icon icon="fa-solid fa-table" />
+      <font-awesome-icon icon="fa-solid fa-table" size="xl" />
       
     </span>
   </label>
