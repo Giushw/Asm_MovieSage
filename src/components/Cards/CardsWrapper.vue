@@ -13,9 +13,7 @@
 <template>
   <section class="wrapper">    
     <template v-for="card in cards" v-bind:key="card.id">
-      <!-- <RouterLink :to="`/detail/${card.id}`"> -->
-        <CardsEntity :info="card" />
-      <!-- </RouterLink> -->
+      <CardsEntity :info="card" />
     </template>
   </section>
 </template>

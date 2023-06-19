@@ -10,7 +10,6 @@
   const emit = defineEmits(['toggle']);
 
   const onChange = () => {
-    console.log('common switch emit');
     status.value = !status.value;
     return emit('toggle', status.value)
   };

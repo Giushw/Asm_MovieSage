@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import type {Results} from '../../decoder/shows';
   import {ref, type Ref} from 'vue';
-  // import CardsEntity from './CardsEntity.vue';
 
   const props = defineProps<{
     values: Results;
@@ -14,11 +13,6 @@
 
 <template>
   <section class="wrapper">    
-    <!-- WIP: Add Routing to detail -->
-    <!-- <RouterLink :to="`/detail/${card.id}`"> -->
-      <!-- <CardsEntity :info="card" /> -->
-    <!-- </RouterLink> -->
-
     <table class="table">
       <thead>
         <tr>

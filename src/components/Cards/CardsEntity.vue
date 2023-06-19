@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import type {Result} from '@/decoder/shows';
   import {ref, type Ref} from 'vue';
-  // import {RouterLink, RouterView} from 'vue-router'
 
   const props = defineProps<{
     info: Result;
@@ -11,7 +10,6 @@
 </script>
 
 <template>
-  <!-- <RouterLink :to="`/detail/${card.id}`"></RouterLink> -->
   <article class="card">
     <picture class="poster">
       <source media="(min-width:768px)" :srcset="`${card.image.original}`">
@@ -96,10 +94,6 @@
 
           @media (min-width: 425px) {
             font-size: 1.3rem;
-          }
-
-          @media (min-width: 768px) {
-            // font-size: 1rem;
           }
         }
 
