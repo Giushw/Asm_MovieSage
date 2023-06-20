@@ -7,17 +7,19 @@
     return Math.floor(Math.random() * (max - min) + min);
   }
 
+  const EMPTY_SUMMARY: string = '<p>Lorem ipsum dolor sit amet,consectetur adipiscing elit. Donec aliquam porta dui. Morbi faucibus quam nec iaculis consectetur. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer ac augue quis urna tincidunt mollis nec id augue. Nullam nunc enim, condimentum eu hendrerit eu, eleifend vitae ante. Ut sit amet massa euismod, vehicula ex luctus, blandit magna. Praesent dignissim non dolor eu laoreet. Donec facilisis justo et metus condimentum vestibulum. Sed eu maximus sapien. Nunc interdum eros libero, id rutrum neque interdum id. Nulla ornare lacinia arcu ut pretium. Maecenas faucibus, ligula eget aliquam malesuada, enim ante congue augue, quis vulputate justo enim nec magna. Donec vel magna sem.</p>';
+
   const EMPTY_RESULT: Result = {
     id: 0,
-    name: '',
+    name: null,
     status: 'Ended',
-    premiered: '',
+    premiered: null,
     summary: '',
     image: {
         medium: '',
         original: ''
     }
-  } 
+  };
 
   const model: Ref<Result> = ref(EMPTY_RESULT);
 
@@ -29,10 +31,12 @@
     const refinedModel: Result = {
       ...model.value,
       id: getRandomArbitrary(0, 1000),
+      // Forcing not Found image to show empty state
       image: {
-        medium: `https://static.tvmaze.com/uploads/images/medium_portrait/81/${model.value.image.medium}.jpg`,
-        original: `https://static.tvmaze.com/uploads/images/original_untouched/81/${model.value.image.medium}.jpg`
-      }
+        medium: 'src/assets/EmptyImg_small.jpg',
+        original: 'src/assets/EmptyImg_small.jpg'
+      },
+      summary: model.value.summary === '' ? model.value.summary : EMPTY_SUMMARY
     };
 
     console.log('onSave data: ', refinedModel);

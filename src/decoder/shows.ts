@@ -44,9 +44,9 @@ type DvdCountry = unknown;
 export interface Result {
   // -- Struct
   id: number,
-  name: string,
+  name: Nullable<string>,
   status: Status,
-  premiered: string,
+  premiered: Nullable<string>,
   image: Image,
   summary: string,
   // -- Partial

@@ -13,7 +13,7 @@
   <article class="card">
     <picture class="poster">
       <source media="(min-width:768px)" :srcset="`${card.image.original}`">
-      <img :src="`${card.image.medium}`"  :alt="card.name">
+      <img :src="`${card.image.medium}`"  :alt="card.name ?? 'Movie Poster'">
     </picture>
 
     <div class="copy">
@@ -68,12 +68,13 @@
     }
 
     .copy {
-      background-color: rgba(0, 0, 0, 0.7);
       position: absolute;
       bottom: 0;
       display: flex;
       flex-direction: column;
+      width: 100%;
       padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.7);
       transform: translate(0, 60%);
       transition: transform 0.3s ease-in-out;
 

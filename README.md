@@ -31,7 +31,8 @@ Feature planned:
 - Card View. (Done)
 - Table View. (Done)
 - Toggling Viewvs. (Done)
-- Create, Update, Delete. (WIP)
 - Modal. (WIP)
-- Tests. (WIP)
+- Create Movie. (Done)
+- Update Movie. (WIP)
+- Delete Movie. (WIP)
 - TBD...

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import {MOCK_RESPONSE_POPULAR, type ResultsObj} from '@/decoder/shows';
+  import {MOCK_RESPONSE_POPULAR, type Result, type ResultsObj} from '@/decoder/shows';
   import type {ActiveView} from '@/lib/types';
   import {ref, type Ref} from 'vue';
   import CardsWrapper from '../Cards/CardsWrapper.vue';
@@ -29,8 +29,10 @@
   const onAddClick = (): boolean => modalVisible.value = true;
   const onCloseClick = (): boolean => modalVisible.value = false;
 
-  const onCreate = () => {
-    console.log('create catch')
+  const onCreate = (movie: Result): void => {
+    console.log('create catch', movie)
+    state.value.results.unshift(movie);
+    return window.localStorage.setItem('PopularFilms', JSON.stringify(state.value));
   };
 
   const onToggle = (switchValue: boolean): void => {
@@ -41,7 +43,7 @@
 <template>
   <main class="main">
     <section class="actions">
-      <button class="button button--icon" @click="onAddClick" @close-modal="onCloseClick" @create-movie="onCreate">
+      <button class="button button--icon" @click="onAddClick">
         <span>Add a Movie</span>
         <font-awesome-icon icon="fa-solid fa-plus" size="lg"/>
       </button>
@@ -55,9 +57,7 @@
       </div>
     </section>
 
-    <Transition>
-      <Modal v-if="modalVisible"/>
-    </Transition>
+    <Modal v-if="modalVisible" @close-modal="onCloseClick" @create-movie="onCreate"/>
 
     <Transition>
       <CardsWrapper v-if="view === 'Cards'" :values="state.results"/>
