@@ -11,6 +11,11 @@
 
 <template>
   <article class="card">
+    <div class="actions">
+      <font-awesome-icon icon="fa-solid fa-pencil" size="lg" />
+      <font-awesome-icon icon="fa-solid fa-trash" size="lg" />
+    </div>
+
     <picture class="poster">
       <source media="(min-width:768px)" :srcset="`${card.image.original}`">
       <img :src="`${card.image.medium}`"  :alt="card.name ?? 'Movie Poster'">
@@ -34,7 +39,7 @@
   </article>
 </template>
 
-<style lang="scss">
+<style  lang="scss">
   .card {
     position: relative;
     display: flex;
@@ -55,6 +60,31 @@
 
     @media (min-width: 1440px) {
       width: 24%;
+    }
+
+    .actions {
+      position: absolute;
+      right: 0;
+      display: flex;
+      place-content: center space-around;
+      padding: 1rem;
+      background-color: rgba(0, 0, 0, 0.7);
+      width: 40%;
+      border-radius: 0 0 0 1rem;
+
+      @media (min-width: 425px) {
+        width: 30%;
+      }
+
+      & > * {
+        transition: scale 0.5s ease-in-out, color 0.5s ease-in-out; 
+        transform: scale(1);
+
+        &:hover {
+          color: var(--color-accent);
+          transform: scale(1.2);
+        }
+      }
     }
 
     .poster {

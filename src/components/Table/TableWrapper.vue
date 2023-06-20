@@ -8,7 +8,7 @@
 
   const cards: Ref<Results> = ref(props.values);
     
-  const headers: Ref<string[]> = ref(['Name', 'Premiered', 'Status', 'Summary'])
+  const headers: Ref<string[]> = ref(['Name', 'Premiered', 'Status', 'Summary', 'Actions'])
 </script>
 
 <template>
@@ -25,6 +25,10 @@
           <td>{{ card.premiered }}</td>
           <td>{{ card.status }}</td>
           <td class="abstract">{{ card.summary.replace(/<\/?[^>]+(>|$)/g, "") }}</td>
+          <td class="actions">
+            <font-awesome-icon icon="fa-solid fa-pencil" size="lg" />
+            <font-awesome-icon icon="fa-solid fa-trash" size="lg" />
+          </td>
         </tr>
       </tbody>
     </table>
@@ -80,6 +84,23 @@
         display: -webkit-box;
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
+      }
+
+      .actions {
+        & :first-child {
+          margin-right: 2rem;
+        }
+        
+        & > * {
+          transition: scale 0.5s ease-in-out, color 0.5s ease-in-out; 
+          transform: scale(1);
+
+          &:hover {
+            color: var(--color-accent);
+            transform: scale(1.2);
+          }
+        }
+
       }
     }
   }

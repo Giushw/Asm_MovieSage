@@ -95,9 +95,14 @@
     </div>
 
     <div class="footer">
-      <button class="button button--icon" @click="onSave">
-        Save
-      </button>
+      <div class="ctas">
+        <button class="button button--inverted" @click="onClose">
+          Cancel
+        </button>
+        <button class="button" @click="onSave">
+          Save
+        </button>
+      </div>
     </div>
     
   </section>
@@ -189,6 +194,12 @@
       display: flex;
       place-content: center flex-end;
       padding: 1rem;
+
+      .ctas {
+        display: flex;
+        place-content: center space-between;
+        width: 20%;
+      }
     }
   }
 </style>

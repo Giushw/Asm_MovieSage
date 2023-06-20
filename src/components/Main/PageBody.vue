@@ -76,7 +76,7 @@
     @media (min-width: 768px) {
     }
 
-    .actions {
+    & > .actions {
       display: flex;
       place-content: center space-between;
       padding: 1rem;

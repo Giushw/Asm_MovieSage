@@ -9,14 +9,18 @@ import {
   faTable,
   faImage,
   faPlus,
-  faXmark
+  faXmark,
+  faPencil,
+  faTrash
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
   faTable,
   faImage,
   faPlus,
-  faXmark
+  faXmark,
+  faPencil,
+  faTrash
   );
 
 const app = createApp(App);
