@@ -4,8 +4,8 @@
   import {ref, type Ref} from 'vue';
   import CardsWrapper from '../Cards/CardsWrapper.vue';
   import CommonSwitch from '../Common/CommonSwitch.vue';
+  import CommonModal from '../Common/CommonModal.vue';
   import TableWrapper from '../Table/TableWrapper.vue';
-  import Modal from '../Common/CommonModal.vue';
 
   const retriveData = (): ResultsObj => {
     let popularFilms: string | null = window.localStorage.getItem('PopularFilms');
@@ -24,19 +24,18 @@
   const state: Ref<ResultsObj> = ref(retriveData());
   const view: Ref<ActiveView> = ref('Cards');
   const modalVisible: Ref<boolean> = ref(false);
-  
+
+  const onToggle = (switchValue: boolean): void => {
+    switchValue ? view.value = 'Table' : view.value = 'Cards'
+  };
 
   const onAddClick = (): boolean => modalVisible.value = true;
   const onCloseClick = (): boolean => modalVisible.value = false;
 
-  const onCreate = (movie: Result): void => {
-    console.log('create catch', movie)
+  const onCreateMovie = (movie: Result): void => {
     state.value.results.unshift(movie);
+    
     return window.localStorage.setItem('PopularFilms', JSON.stringify(state.value));
-  };
-
-  const onToggle = (switchValue: boolean): void => {
-    switchValue ? view.value = 'Table' : view.value = 'Cards'
   };
 </script>
 
@@ -57,15 +56,21 @@
       </div>
     </section>
 
-    <Modal v-if="modalVisible" @close-modal="onCloseClick" @create-movie="onCreate"/>
-
     <Transition>
-      <CardsWrapper v-if="view === 'Cards'" :values="state.results"/>
+      <CardsWrapper v-if="view === 'Cards'" :values="state.results" />
     </Transition>
 
     <Transition>
       <TableWrapper v-if="view === 'Table'" :values="state.results"/>
     </Transition>
+
+    <CommonModal 
+      v-if="modalVisible"
+      :mode="'Create'"
+      :movie="null"
+      @close-modal="onCloseClick"
+      @create-movie="onCreateMovie"
+    />
   </main>
 </template>
 
@@ -95,16 +100,6 @@
         display: flex;
         align-items: center;
       }
-    }
-
-    .v-enter-active,
-    .v-leave-active {
-      transition: opacity 0.5s ease-in-out;
-    }
-
-    .v-enter-from,
-    .v-leave-to {
-      opacity: 0;
     }
   }
 

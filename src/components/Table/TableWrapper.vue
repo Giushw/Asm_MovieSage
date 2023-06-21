@@ -1,14 +1,59 @@
 <script setup lang="ts">
-  import type {Results} from '../../decoder/shows';
+  import type {Results, Result} from '../../decoder/shows';
   import {ref, type Ref} from 'vue';
+  import CommonModal from '../Common/CommonModal.vue';
+  import CommonMovieActions from '../Common/CommonMovieActions.vue';
 
   const props = defineProps<{
     values: Results;
   }>();
 
   const cards: Ref<Results> = ref(props.values);
-    
-  const headers: Ref<string[]> = ref(['Name', 'Premiered', 'Status', 'Summary', 'Actions'])
+  const headers: Ref<string[]> = ref(['Name', 'Premiered', 'Status', 'Summary', 'Actions']);
+  const modalVisible: Ref<boolean> = ref(false);
+  const modalMode: Ref<'Edit' | 'Delete'> = ref('Delete');
+  const focusedCard: Ref<Result | null> = ref(null);
+
+  const onEditMovie = (id: number): void => {
+    modalMode.value = 'Edit';
+    modalVisible.value = true;
+    focusedCard.value = cards.value.find(c => c.id === id) ?? null;
+  };
+
+  const onDeleteMovie = (id: number): void => {
+    modalMode.value = 'Delete';
+    modalVisible.value = true;
+    focusedCard.value = cards.value.find(c => c.id === id) ?? null;
+  };
+
+  const onCloseClick = (): boolean => modalVisible.value = false;
+
+  const onEditMovieRequest = (movie: Result): void => {
+    const updatedState = cards.value.map(r => {
+      if (r.id === movie.id) {
+        r = {
+          ...r,
+          ...movie
+        }
+      }
+    });
+
+    modalVisible.value = false;
+
+    return window.localStorage.setItem('PopularFilms', JSON.stringify({
+      results: updatedState
+    }));
+  };
+
+  const onDeleteMovieRequest = (movie: Result): void => {
+    const updatedState = cards.value.filter(r => r.id !== movie.id);
+
+    modalVisible.value = false;
+
+    return window.localStorage.setItem('PopularFilms', JSON.stringify({
+      results: updatedState
+    }));
+  };
 </script>
 
 <template>
@@ -25,14 +70,26 @@
           <td>{{ card.premiered }}</td>
           <td>{{ card.status }}</td>
           <td class="abstract">{{ card.summary.replace(/<\/?[^>]+(>|$)/g, "") }}</td>
-          <td class="actions">
-            <font-awesome-icon icon="fa-solid fa-pencil" size="lg" />
-            <font-awesome-icon icon="fa-solid fa-trash" size="lg" />
+          <td>
+            <CommonMovieActions 
+              :id="card.id"
+              @edit-movie="onEditMovie(card.id)"
+              @delete-movie="onDeleteMovie(card.id)"
+            />
           </td>
         </tr>
       </tbody>
     </table>
   </section>
+
+  <CommonModal 
+    v-if="modalVisible"
+    :mode="modalMode" 
+    :movie="focusedCard"
+    @close-modal="onCloseClick" 
+    @edit-movie=" focusedCard ? onEditMovieRequest(focusedCard) : null"
+    @delete-movie="focusedCard ? onDeleteMovieRequest(focusedCard) : null"
+  />
 </template>
 
 <style scoped lang="scss">
@@ -84,23 +141,6 @@
         display: -webkit-box;
         -webkit-line-clamp: 4;
         -webkit-box-orient: vertical;
-      }
-
-      .actions {
-        & :first-child {
-          margin-right: 2rem;
-        }
-        
-        & > * {
-          transition: scale 0.5s ease-in-out, color 0.5s ease-in-out; 
-          transform: scale(1);
-
-          &:hover {
-            color: var(--color-accent);
-            transform: scale(1.2);
-          }
-        }
-
       }
     }
   }

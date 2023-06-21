@@ -7,6 +7,21 @@
     return Math.floor(Math.random() * (max - min) + min);
   }
 
+  export type ModalMode = 'Create' | 'Edit' | 'Delete';
+
+  const props = defineProps<{
+    mode: ModalMode,
+    movie: Result | null
+  }>();
+
+  const emit = defineEmits([
+    'closeModal',
+    'createMovie',
+    'editMovie',
+    'deleteMovie'
+  ]);
+
+
   const EMPTY_SUMMARY: string = '<p>Lorem ipsum dolor sit amet,consectetur adipiscing elit. Donec aliquam porta dui. Morbi faucibus quam nec iaculis consectetur. Interdum et malesuada fames ac ante ipsum primis in faucibus. Integer ac augue quis urna tincidunt mollis nec id augue. Nullam nunc enim, condimentum eu hendrerit eu, eleifend vitae ante. Ut sit amet massa euismod, vehicula ex luctus, blandit magna. Praesent dignissim non dolor eu laoreet. Donec facilisis justo et metus condimentum vestibulum. Sed eu maximus sapien. Nunc interdum eros libero, id rutrum neque interdum id. Nulla ornare lacinia arcu ut pretium. Maecenas faucibus, ligula eget aliquam malesuada, enim ante congue augue, quis vulputate justo enim nec magna. Donec vel magna sem.</p>';
 
   const EMPTY_RESULT: Result = {
@@ -21,13 +36,12 @@
     }
   };
 
-  const model: Ref<Result> = ref(EMPTY_RESULT);
+  const model: Ref<Result> = ref(props.movie ?? EMPTY_RESULT);
+  const modalMode: Ref<ModalMode> = ref(props.mode);
 
-  const emit = defineEmits(['createMovie', 'closeModal']);
+  const onClose = (): void => emit('closeModal');
 
   const onSave = (): void => {
-    console.log('onSave data: ', model.value);
-
     const refinedModel: Result = {
       ...model.value,
       id: getRandomArbitrary(0, 1000),
@@ -36,72 +50,96 @@
         medium: 'src/assets/EmptyImg_small.jpg',
         original: 'src/assets/EmptyImg_small.jpg'
       },
-      summary: model.value.summary === '' ? model.value.summary : EMPTY_SUMMARY
+      summary: model.value.summary !== '' || model.value.summary ? model.value.summary : EMPTY_SUMMARY
     };
 
-    console.log('onSave data: ', refinedModel);
+    emit('createMovie', refinedModel);
 
-    emit('createMovie', refinedModel)
     return emit('closeModal');
   };
 
-  const onClose = (): void => {
-    console.log('onClose click');
+  const onEdit = (): void => {
+    const refinedModel: Result = {
+      ...model.value,
+      image: model.value.image ?? {
+        medium: 'src/assets/EmptyImg_small.jpg',
+        original: 'src/assets/EmptyImg_small.jpg'
+      },
+      summary: model.value.summary === '' || model.value.summary === null 
+        ? model.value.summary 
+        : EMPTY_SUMMARY
+    };
+
+    emit('editMovie', model.value.id,  refinedModel);
+
     return emit('closeModal');
   };
+
+  const onConfirm = (): void => emit('deleteMovie', model.value.id);
 </script>
 
 <template>
   <section class="modal">
     <div class="heading">
-      <h3>Add a new movie</h3>
+      <h3 v-if="modalMode === 'Create'">Insert movie</h3>
+      <h3 v-if="modalMode === 'Edit'">Edit movie</h3>
+      <h3 v-if="modalMode === 'Delete'">Delete movie</h3>
+
       <div class="icon" @click="onClose">
         <font-awesome-icon icon="fa-solid fa-xmark" size="2xl" />
       </div>
     </div>
 
     <div class="body">
-      <div class="row">
-        <div class="input-group">
-          <label>Name </label>
-          <input type="text" v-model="model.name">
+      <template v-if="modalMode === 'Create' || modalMode === 'Edit'">
+        <div class="row">
+          <div class="input-group">
+            <label>Name </label>
+            <input type="text" v-model="model.name">
+          </div>
+
+          <div class="input-group">
+            <label>Relase Date</label>
+            <input type="date" v-model="model.premiered">
+          </div>
         </div>
 
         <div class="input-group">
-          <label>Relase Date</label>
-          <input type="date" v-model="model.premiered">
+          <label>Summary </label>
+          <textarea v-model="model.summary"></textarea>
         </div>
 
-      </div>
-        <div class="input-group">
-        <label>Summary </label>
-        <textarea v-model="model.summary"></textarea>
-      </div>
+        <div class="row">
+          <div class="input-group">
+            <label>Status</label>
+            <select v-model="model.status">
+              <option>Ended</option>
+              <option>Running</option>
+            </select>
+          </div>
 
-      <div class="row">
-        <div class="input-group">
-          <label>Status</label>
-          <select v-model="model.status">
-            <option>Ended</option>
-            <option>Running</option>
-          </select>
+          <div class="input-group">
+            <label>Image Path</label>
+            <input type="text" v-model="model.image.medium">
+          </div>
         </div>
+      </template>
 
-        <div class="input-group">
-          <label>Image Path</label>
-          <input type="text" v-model="model.image.medium">
+      <template v-else>
+        <div class="body__delete">
+          <p>Are you sure you want to delete: </p>
+          <h5>{{ model.name }} ?</h5>
         </div>
-      </div>
+      </template>
     </div>
 
     <div class="footer">
       <div class="ctas">
-        <button class="button button--inverted" @click="onClose">
-          Cancel
-        </button>
-        <button class="button" @click="onSave">
-          Save
-        </button>
+        <button class="button button--inverted" @click="onClose">Cancel</button>
+        
+        <button v-if="modalMode === 'Create'" class="button" @click="onSave">Save</button>
+        <button v-if="modalMode === 'Edit'" class="button" @click="onEdit">Apply</button>
+        <button v-if="modalMode === 'Delete'" class="button" @click="onConfirm">Confirm</button>
       </div>
     </div>
     
@@ -173,6 +211,19 @@
       display: flex;
       flex-direction: column;
 
+      &__delete {
+        display: flex;
+        flex-direction: column;
+        place-content: center;
+        font-size: 1.5rem;
+        padding: 0 1.5rem;
+
+        h5 {
+          font-size: 3rem;
+          color: var(--color-accent);
+        }
+      }
+
       .row {
         display: block;
 
@@ -198,7 +249,7 @@
       .ctas {
         display: flex;
         place-content: center space-between;
-        width: 20%;
+        width: 22%;
       }
     }
   }
