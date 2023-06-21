@@ -7,8 +7,6 @@
   const props = defineProps<{
     values: Results;
   }>();
-
-  const emit = defineEmits(['editMovieRequest', 'deleteMovieRequest']);
   
   const cards: Ref<Results> = ref(props.values);
   const modalVisible: Ref<boolean> = ref(false);
