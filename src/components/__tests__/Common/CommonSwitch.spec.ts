@@ -1,11 +1,11 @@
 import {describe, it, expect} from 'vitest'
 import {mount} from '@vue/test-utils'
-import CommonSwitchVue from '@/components/common/CommonSwitch.vue';
+import CommonSwitch from '../../Common/CommonSwitch.vue';
 
 describe('CommonSwitchVue', () => {
   it('renders properly', async () => {
     const wrapper = mount(
-      CommonSwitchVue, 
+      CommonSwitch, 
       {props: {
         checked: false
       }}
